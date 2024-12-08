@@ -5,9 +5,6 @@ const flags: []const []const u8 = &.{
     "-fno-exceptions",
     "-fno-rtti",
 };
-const install_headers_options = .{
-    .include_extensions = &[_][]const u8{ ".h", ".hpp", ".hpp11" },
-};
 
 pub fn build(b: *std.Build) !void {
     // Config
@@ -858,11 +855,9 @@ fn configureGlslangLibrary(lib: *std.Build.Step.Compile, enable_opt: bool) void 
         "glslang/MachineIndependent/Versions.h",
     );
 
-    lib.installHeadersDirectory(
-        glslang_upstream.path("glslang/Public"),
-        "glslang/Public",
-        install_headers_options,
-    );
+    lib.installHeadersDirectory(glslang_upstream.path("glslang/Public"), "glslang/Public", .{
+        .include_extensions = &[_][]const u8{ ".h", ".hpp", ".hpp11" },
+    });
 
     lib.installHeader(
         glslang_upstream.path("SPIRV/disassemble.h"),
